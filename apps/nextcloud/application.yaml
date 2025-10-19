@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://nextcloud.github.io/helm
     chart: nextcloud
-    targetRevision: 8.4.1
+    targetRevision: 7.4.0
     helm:
       valuesObject:
         # Use Apache variant - simpler and more stable
@@ -23,8 +23,6 @@ spec:
             nginx.ingress.kubernetes.io/proxy-body-size: "10G"
             nginx.ingress.kubernetes.io/proxy-buffering: "off"
             nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
-            nginx.ingress.kubernetes.io/server-snippet: |
-              client_max_body_size 10G;
           hosts:
             - nextcloud.mxluk.de
           tls: []
