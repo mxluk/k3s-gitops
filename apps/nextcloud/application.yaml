@@ -63,7 +63,7 @@ spec:
               storageClass: longhorn
               size: 5Gi
         
-        # Redis for caching
+        # Redis for caching  
         redis:
           enabled: true
           auth:
