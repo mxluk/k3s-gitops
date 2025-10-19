@@ -74,6 +74,8 @@ spec:
               enabled: true
               storageClass: longhorn
               size: 1Gi
+          replica:
+            replicaCount: 0
         
         # Resources
         resources:
