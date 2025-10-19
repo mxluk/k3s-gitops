@@ -13,7 +13,7 @@ spec:
       valuesObject:
         controller:
           service:
-            type: ClusterIP
+            type: ClusterIP  # No LoadBalancer needed - Cloudflare Tunnel handles ingress
           ingressClassResource:
             default: true
           config:
@@ -26,4 +26,6 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    # Removed CreateNamespace=true since namespace already exists
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
