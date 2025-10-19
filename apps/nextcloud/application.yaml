@@ -12,9 +12,10 @@ spec:
     targetRevision: 8.4.1
     helm:
       valuesObject:
+        # Use Apache variant - simpler and more stable
         image:
-          flavor: fpm-alpine
-        
+          flavor: apache
+          
         ingress:
           enabled: true
           className: nginx
@@ -22,6 +23,8 @@ spec:
             nginx.ingress.kubernetes.io/proxy-body-size: "10G"
             nginx.ingress.kubernetes.io/proxy-buffering: "off"
             nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+            nginx.ingress.kubernetes.io/server-snippet: |
+              client_max_body_size 10G;
           hosts:
             - nextcloud.mxluk.de
           tls: []
@@ -30,6 +33,19 @@ spec:
           host: nextcloud.mxluk.de
           username: admin
           password: changeme123!
+          
+          # Database config
+          existingSecret:
+            enabled: false
+          
+          # PHP settings for better performance
+          phpConfigs:
+            uploadLimit.ini: |
+              upload_max_filesize = 16G
+              post_max_size = 16G
+              max_input_time = 3600
+              max_execution_time = 3600
+              memory_limit = 512M
           
           configs:
             proxy.config.php: |-
@@ -43,6 +59,31 @@ spec:
                 'overwriteprotocol' => 'https',
               );
         
+        # Increase startup times for initial setup
+        startupProbe:
+          enabled: true
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+          successThreshold: 1
+        
+        livenessProbe:
+          enabled: true
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        
+        readinessProbe:
+          enabled: true
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        
         # Use Longhorn for persistent storage
         persistence:
           enabled: true
@@ -53,6 +94,8 @@ spec:
         # PostgreSQL database
         postgresql:
           enabled: true
+          image:
+            tag: latest
           auth:
             username: nextcloud
             password: nextcloud123!
@@ -66,6 +109,8 @@ spec:
         # Redis for caching  
         redis:
           enabled: true
+          image:
+            tag: latest
           auth:
             enabled: true
             password: redis123!
@@ -83,7 +128,7 @@ spec:
             cpu: 100m
             memory: 512Mi
           limits:
-            memory: 1Gi
+            memory: 2Gi
         
         # Cronjobs for Nextcloud maintenance
         cronjob:
