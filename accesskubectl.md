@@ -1,0 +1,1 @@
+ssh -L 6443:10.0.0.4:6443 root@<public-ip>
