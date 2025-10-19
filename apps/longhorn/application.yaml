@@ -10,7 +10,6 @@ spec:
     chart: longhorn
     targetRevision: 1.7.2
     helm:
-      skipCrds: false
       valuesObject:
         defaultSettings:
           # Storage configuration
@@ -36,13 +35,16 @@ spec:
           defaultClass: true
           defaultClassReplicaCount: 2
         
-        # Longhorn UI ingress (optional, accessible via Argo CD tunnel for now)
+        # Longhorn UI ingress
         ingress:
-          enabled: false
-        
-        # Disable pre-upgrade check that causes issues on fresh install
-        preUpgradeChecker:
-          jobEnabled: false
+          enabled: true
+          ingressClassName: nginx
+          host: longhorn.mxluk.de
+          tls: false  # Cloudflare Tunnel handles TLS
+          annotations:
+            nginx.ingress.kubernetes.io/auth-type: basic
+            nginx.ingress.kubernetes.io/auth-secret: longhorn-basic-auth
+            nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
@@ -53,4 +55,3 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
-      - SkipDryRunOnMissingResource=true
