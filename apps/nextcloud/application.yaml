@@ -31,6 +31,14 @@ spec:
           host: nextcloud.mxluk.de
           username: admin
           password: changeme123!
+
+          defaultConfigs:
+            ".htaccess": true
+            "redis.config.php": true
+            "apache-pretty-urls.config.php": true
+            "apcu.config.php": true
+            "apps.config.php": true
+            "autoconfig.php": true
           
           # Database config
           existingSecret:
