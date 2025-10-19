@@ -17,7 +17,7 @@ spec:
           replicaAutoBalance: "best-effort"
           
           # S3 Backup configuration
-          backupTarget: "s3://mxluk-k3s@weur"
+          backupTarget: "s3://mxluk-k3s@weur/"
           backupTargetCredentialSecret: "longhorn-s3-secret"
           
           # Encryption
