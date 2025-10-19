@@ -66,9 +66,6 @@ spec:
               );
           podSecurityContext:
             fsGroup: 33
-          securityContext:
-            runAsUser: 33
-            runAsGroup: 33
         
         # Increase startup times for initial setup
         startupProbe:
