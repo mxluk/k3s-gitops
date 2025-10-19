@@ -64,6 +64,11 @@ spec:
                 'forwarded_for_headers' => array('HTTP_X_FORWARDED_FOR'),
                 'overwriteprotocol' => 'https',
               );
+          podSecurityContext:
+            fsGroup: 33
+          securityContext:
+            runAsUser: 33
+            runAsGroup: 33
         
         # Increase startup times for initial setup
         startupProbe:
