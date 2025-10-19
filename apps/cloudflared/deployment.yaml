@@ -19,6 +19,8 @@ spec:
         args:
         - tunnel
         - --no-autoupdate
+        - --protocol
+        - http2
         - run
         - --token
         - $(TUNNEL_TOKEN)
@@ -28,13 +30,6 @@ spec:
             secretKeyRef:
               name: cloudflared-token
               key: token
-        livenessProbe:
-          httpGet:
-            path: /ready
-            port: 2000
-          failureThreshold: 1
-          initialDelaySeconds: 10
-          periodSeconds: 10
         resources:
           requests:
             cpu: 50m
